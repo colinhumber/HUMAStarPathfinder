@@ -45,9 +45,10 @@
 // on "init" you need to initialize your instance
 -(id) init
 {
-	// always call "super" init
-	// Apple recommends to re-assign "self" with the "super's" return value
-	if( (self=[super init]) ) {
+	if( (self = [super init]) ) {
+		self.touchEnabled = YES;
+		self.touchMode = kCCTouchesOneByOne;
+		
 		self.tileMap = [[CCTMXTiledMap alloc] initWithTMXFile:@"desert.tmx"];
 		[self addChild:self.tileMap];
 		
@@ -65,5 +66,44 @@
 	}
 	return self;
 }
+
+- (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
+	return YES;
+}
+
+- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+	CGPoint location = [self convertTouchToNodeSpace:touch];
+	
+	NSArray *path = [self.pathfinder findPathFromStart:self.player.position
+												toTarget:location];
+	
+	NSMutableArray *actions = [NSMutableArray array];
+
+	for (NSValue *pointValueInPath in path) {
+		CGPoint point = pointValueInPath.CGPointValue;
+		
+		CCMoveTo *moveTo = [CCMoveTo actionWithDuration:0.5f position:point];
+		[actions addObject:moveTo];
+	}
+	
+	CCSequence *sequence = [CCSequence actionWithArray:actions];
+	[self.player runAction:sequence];
+}
+
+#pragma mark - HUMAStarPathfinderDelegate
+- (BOOL)pathfinder:(HUMAStarPathfinder *)pathFinder canWalkToNodeAtTileLocation:(CGPoint)tileLocation {
+	CCTMXLayer *meta = [self.tileMap layerNamed:@"Meta"];
+	uint8_t gid = [meta tileGIDAt:tileLocation];
+
+	if (gid) {
+		NSDictionary *properties = [self.tileMap propertiesForGID:gid];
+		BOOL walkable = [properties[@"walkable"] boolValue];
+		
+		return walkable;
+	}
+	
+	return YES;
+}
+
 
 @end
