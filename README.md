@@ -28,5 +28,8 @@ See the [header](HUMAStarPathfinder/HUMAStarPathfinder.h) for full documentation
 ## Installation
 Just add the four files in `HUMAStarPathfinder` to your project.
 
+- HUMAStarPathfinder.h and .m
+- HUMAStarPathfinderNode.h and .m
+
 ## License
 Released under the [MIT license](LICENSE)
