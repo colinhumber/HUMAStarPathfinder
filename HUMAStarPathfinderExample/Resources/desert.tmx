@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="15" height="10" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" source="desert.tsx"/>
+ <tileset firstgid="49" name="Meta" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="meta_tiles.png" width="67" height="34"/>
+  <tile id="0">
+   <properties>
+    <property name="unwalkable" value="YES"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Ground" width="15" height="10">
+  <data encoding="base64" compression="zlib">
+   eJyVz7sKgDAMBdCqg6/B12BxKOhQHzj4/1/nFVoIQUkcztAkN6HOGOOYC/xLfYYFTphYbxPeMRvxfszQu/4j+9RWlvXKu7THd3A7HEQeFJBAKsjIXBO0UEIlqMncGFjooBcMZE77V40/O25RfQ8z
+  </data>
+ </layer>
+ <layer name="Meta" width="15" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYMAEhlBMCkBXT0g/Nnl0e/GZgcs+UtxNqh+HMqCGX0kxAwBOyAKv
+  </data>
+ </layer>
+ <objectgroup name="Objects" width="15" height="10">
+  <object name="spawnPoint" x="79" y="76"/>
+ </objectgroup>
+</map>
