@@ -5,7 +5,7 @@
   <image source="meta_tiles.png" width="67" height="34"/>
   <tile id="0">
    <properties>
-    <property name="unwalkable" value="YES"/>
+    <property name="walkable" value="NO"/>
    </properties>
   </tile>
  </tileset>
