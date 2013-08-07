@@ -22,10 +22,12 @@ NSArray *path = [self.pathfinder findPathFromStart:startPoint
 See the [header](HUMAStarPathfinder/HUMAStarPathfinder.h) for full documentation.
 
 ## Installation
-Just add the four files in `HUMAStarPathfinder` to your project.
+Just add the four files in `HUMAStarPathfinder` to your project
 
 - HUMAStarPathfinder.h and .m
 - HUMAStarPathfinderNode.h and .m
+
+or add `HUMAStarPathfinder` to your Podfile if you're using CocoaPods.
 
 ## License
 Released under the [MIT license](LICENSE)
