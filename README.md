@@ -84,7 +84,7 @@ Finds the shortest path from the start point to the target point, avoiding any n
 
       - (CGPoint)positionForTileLocation:(CGPoint)tileLocation;
 
-Converts a tile location to the position on screen. The returned CGPoint is relative to the specified coordinateSystemOrigin value. If `HUMCoodinateSystemOriginTopLeft`, the position is relative to the top-left of the screen. If `HUMCoodinateSystemOriginBottomLeft`, the position is relative to the bottom-left of the screen.
+Converts a tile location to the position on screen. The provided CGPoint is relative to the specified coordinateSystemOrigin value. If `HUMCoodinateSystemOriginTopLeft`, the position is relative to the top-left of the screen. If `HUMCoodinateSystemOriginBottomLeft`, the position is relative to the bottom-left of the screen.
 
       - (CGPoint)tileLocationForPosition:(CGPoint)position;
 

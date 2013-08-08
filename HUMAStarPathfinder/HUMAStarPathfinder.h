@@ -181,7 +181,7 @@ typedef NS_ENUM(u_int8_t, HUMCoodinateSystemOrigin) {
  *
  *	@return	The location of the tile within the tile matrix (eg. 2, 0)
  *  
- *  @note The returned CGPoint is relative to the specified coordinateSystemOrigin value. If HUMCoodinateSystemOriginTopLeft, the position is relative to the top-left of the screen.
+ *  @note The provided CGPoint is relative to the specified coordinateSystemOrigin value. If HUMCoodinateSystemOriginTopLeft, the position is relative to the top-left of the screen.
  *		  If HUMCoodinateSystemOriginBottomLeft, the position is relative to the bottom-left of the screen.
  */
 - (CGPoint)tileLocationForPosition:(CGPoint)position;
