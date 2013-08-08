@@ -7,7 +7,7 @@ HUMAStarPathfinder is tested on iOS 6 and iOS 7 and requires ARC.
 The pathfinding algorithm is generic to work with any game engines (I've tested it with Cocos2d and SpriteKit), but will return a path assuming the game engine's coordinate system has its origin at the bottom-left of the screen.
 
 ## Example
-Check out the included Xcode project for an example Cocos2d game. Tap anywhere to move the icon, which will avoid any tiles marked in red.
+Check out the included Xcode project for an example Cocos2d game. The sample will only run on a non-retina device/simulator properly as I haven't had a chance to create a retina tile map yet. Tap anywhere to move the icon, which will avoid any tiles marked in red.
 
 ## Usage
 ```objc
@@ -35,6 +35,23 @@ NSArray *path = [self.pathfinder findPathFromStart:startPoint
   }
   
   return walkable;
+}
+
+// optionally, you can implement the delegate method to alter the cost to move from one node to another
+- (NSUInteger)pathfinder:(HUMAStarPathfinder *)pathfinder costForNodeAtTileLocation:(CGPoint)tileLocation {
+  CCTMXLayer *ground = [self.tileMap layerNamed:@"Ground"];
+  uint32_t gid = [ground tileGIDAt:tileLocation];
+  
+  NSUInteger cost = pathfinder.baseMovementCost;
+  
+  if (gid) {
+    NSDictionary *properties = [self.tileMap propertiesForGID:gid];
+    if (properties[@"cost"]) {
+      cost = [properties[@"cost"] integerValue];
+    }
+  }
+  
+  return cost;
 }
 ```
 
@@ -97,6 +114,13 @@ The HUMAStarPathfinder provides one delegate protocol. The HUMAStarPathfinderDel
       - (BOOL)pathfinder:(HUMAStarPathfinder*)pathFinder canWalkToNodeAtTileLocation:(CGPoint)tileLocation;
 
 Determines if a particular node is walkable. Walkability is dictated by the app/game. For example, a mountain may be unwalkable whereas a swamp may be. Returns YES if the node is walkable, NO otherwise.
+
+The HUMAStarPathfinderDelegate has the following optional methods:
+
+      - (NSUInteger)pathfinder:(HUMAStarPathfinder *)pathfinder costForNodeAtTileLocation:(CGPoint)tileLocation
+
+Asks the delegate for the cost to walk on the specified tile horizontally from another tile. For example, certain nodes may have a higher cost to reach. A swamp may have a higher value than grass. If a tile does not have movement information you should return the `baseMovementCost` for the provided pathfinder instance. If not implemented, the base cost to walk horizonatally to a tile is 10 and diagonally is 14.14 (hypoteneuse of a 10 x 10 triangle).
+
 
 ## Installation
 Just add the four files in `HUMAStarPathfinder` to your project

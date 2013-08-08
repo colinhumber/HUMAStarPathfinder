@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(u_int8_t, HUMAStarDistanceType) {
+typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
 	/**
 	 *	Useful when on a square grid that allows 4 directions of movement. Also known as taxicab distance.
 	 *  See http://en.wikipedia.org/wiki/Taxicab_geometry for more details.
@@ -28,7 +28,7 @@ typedef NS_ENUM(u_int8_t, HUMAStarDistanceType) {
 	HUMAStarDistanceTypeChebyshev
 };
 
-typedef NS_ENUM(u_int8_t, HUMCoodinateSystemOrigin) {
+typedef NS_ENUM(NSUInteger, HUMCoodinateSystemOrigin) {
 	/**
 	 *	The origin (0, 0) is at the top-left of the screen. For example, UIKit.
 	 */
@@ -113,6 +113,12 @@ typedef NS_ENUM(u_int8_t, HUMCoodinateSystemOrigin) {
  */
 @property (nonatomic, assign) BOOL pathCanCrossBorders;
 
+/**
+ *	The cost to move horizontally from one node to another. This is set to 10 but different costs can be used by conforming to the HUMAStarPathfinderDelegate and implementing
+ *  -pathfinder:costForNodeAtTileLocation:.
+ */
+@property (nonatomic, readonly) NSUInteger baseMovementCost;
+
 ///---------------------------
 /// @name Initialization
 ///---------------------------
@@ -194,14 +200,29 @@ typedef NS_ENUM(u_int8_t, HUMCoodinateSystemOrigin) {
  *  walkability of tiles.
  */
 @protocol HUMAStarPathfinderDelegate <NSObject>
+
 @required
 /**
- *	Determines if a particular node is walkable. Walkability is dictated by the app/game. For example, a mountain may be unwalkable whereas a swamp may be.
+ *	Asks the delegate if a particular node is walkable. Walkability is dictated by the app/game. For example, a mountain may be unwalkable whereas a swamp may be.
  *
  *	@param	pathFinder		The pathfinder being used.
  *	@param	tileLocation	The location of the tile within the tile matrix being inspected.
  *
  *	@return	Returns YES if the node at tileLocation is walkable. NO, otherwise.
  */
-- (BOOL)pathfinder:(HUMAStarPathfinder*)pathFinder canWalkToNodeAtTileLocation:(CGPoint)tileLocation;
+- (BOOL)pathfinder:(HUMAStarPathfinder *)pathfinder canWalkToNodeAtTileLocation:(CGPoint)tileLocation;
+
+
+@optional
+/**
+ *	Asks the delegate for the cost to walk on the specified tile horizontally from another tile. For example, certain nodes may have a higher cost to reach. A swamp may have a higher value than grass. If not implemented,
+ *  the base cost to walk horizonatally to a tile is 10 and diagonally is 14.14 (hypoteneuse of a 10 x 10 triangle).
+ *
+ *	@param	pathfinder		The pathfinder being used.
+ *	@param	tileLocation	The location of the tile within the tile matrix being inspected.
+ *
+ *	@return An NSInteger denoting the cost to walk on the node.
+ */
+- (NSUInteger)pathfinder:(HUMAStarPathfinder *)pathfinder costForNodeAtTileLocation:(CGPoint)tileLocation;
+
 @end

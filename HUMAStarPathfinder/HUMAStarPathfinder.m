@@ -12,6 +12,7 @@
 @interface HUMAStarPathfinder () {
 	struct {
 		unsigned int delegateCanWalkToNodeAtTileLocation:1;
+		unsigned int delegateCostForNodeAtTileLocation:1;
 	} _delegateFlags;
 }
 
@@ -67,6 +68,10 @@
 	
 	if ([_delegate respondsToSelector:@selector(pathfinder:canWalkToNodeAtTileLocation:)]) {
 		_delegateFlags.delegateCanWalkToNodeAtTileLocation = YES;
+	}
+	
+	if ([_delegate respondsToSelector:@selector(pathfinder:costForNodeAtTileLocation:)]) {
+		_delegateFlags.delegateCostForNodeAtTileLocation = YES;
 	}
 }
 
@@ -182,7 +187,7 @@
  *	Calculates the cost to move from one node to another.
  *
  *	@param	fromNode	The start node.
- *	@param	toNode	The destination node.
+ *	@param	toNode		The destination node.
  *
  *	@return	The base movement cost, if moving horizontally or vertically. The diagonal movement cost, if moving diagonally.
  */
@@ -190,11 +195,19 @@
 	CGPoint fromLocation = fromNode.tileLocation;
 	CGPoint toLocation = toNode.tileLocation;
 	
+	NSInteger baseMovementCost = self.baseMovementCost;
+	CGFloat diagonalMovementCost = self.diagonalMovementCost;
+	
+	if (_delegateFlags.delegateCostForNodeAtTileLocation) {
+		baseMovementCost = [self.delegate pathfinder:self costForNodeAtTileLocation:toLocation];
+		diagonalMovementCost = sqrtf((baseMovementCost * baseMovementCost) + (baseMovementCost * baseMovementCost));
+	}
+	
 	if ((fromLocation.x != toLocation.x) && (fromLocation.y != toLocation.y)) {
-		return self.diagonalMovementCost;
+		return diagonalMovementCost;
 	}
 	else {
-		return self.baseMovementCost;
+		return baseMovementCost;
 	}
 }
 

@@ -105,5 +105,20 @@
 	return walkable;
 }
 
+- (NSUInteger)pathfinder:(HUMAStarPathfinder *)pathfinder costForNodeAtTileLocation:(CGPoint)tileLocation {
+	CCTMXLayer *ground = [self.tileMap layerNamed:@"Ground"];
+	uint32_t gid = [ground tileGIDAt:tileLocation];
+	
+	NSUInteger cost = pathfinder.baseMovementCost;
+	
+	if (gid) {
+		NSDictionary *properties = [self.tileMap propertiesForGID:gid];
+		if (properties[@"cost"]) {
+			cost = [properties[@"cost"] integerValue];
+		}
+	}
+	
+	return cost;
+}
 
 @end
