@@ -45,8 +45,6 @@ typedef NS_ENUM(u_int8_t, HUMCoodinateSystemOrigin) {
 
 /**
  *	An implementation of the A* Pathfinding algorithm for calculating a path between two points on a tile-based grid.
- *
- *  @note This is meant to be used by game engines who's coordinate system is based on a bottom-left origin, such as Cocos2d or SpriteKit.
  */
 @interface HUMAStarPathfinder : NSObject
 
