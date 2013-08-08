@@ -13,12 +13,12 @@ Check out the included Xcode project for an example Cocos2d game. Tap anywhere t
 ```objc
 // initialize a pathfinder. Store as an instance variable so you can reference it on touches later. Optionally set a delegate. The tileMap object can be any tile map implementation. In the example, it is a CCTMXTiledMap, but can be anything. The mapSize is the size of the map in tiles. The tileSize is the size of each tile.
 self.pathfinder = [HUMAStarPathfinder pathfinderWithTileMapSize:tileMap.mapSize
-													                             tileSize:tileMap.tileSize
-													                             delegate:self];
+				  						               tileSize:tileMap.tileSize
+					    		                       delegate:self];
 
 // find a path from the start point to the target point. The target could be where a tap occured or some other point determined programmatically. Returned is an array of NSValue-wrapped CGPoints that describe the path. From here you can create a CGPath or UIBezier path for a sprite to follow, move a sprite from point to point, etc.
 NSArray *path = [self.pathfinder findPathFromStart:startPoint
-										                      toTarget:targetPoint];
+										  toTarget:targetPoint];
 
 ...
 
