@@ -176,11 +176,19 @@
 	
 	while (node.parentNode) {
 		CGPoint screenPosition = [self positionForTileLocation:node.tileLocation];
+#if TARGET_OS_IPHONE
 		[self.shortestPath insertObject:[NSValue valueWithCGPoint:screenPosition] atIndex:0];
+#else
+		[self.shortestPath insertObject[NSValue valueWithPoint:screenPosition] atIndex:0];
+#endif
 		node = node.parentNode;
 	}
 	
+#if TARGET_OS_IPHONE
 	[self.shortestPath insertObject:[NSValue valueWithCGPoint:self.startPoint] atIndex:0];
+#else
+	[self.shortestPath insertObject:[NSValue valueWithPoint:self.startPoint] atIndex:0];
+#endif
 }
 
 /**
