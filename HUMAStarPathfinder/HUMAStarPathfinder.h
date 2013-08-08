@@ -53,14 +53,14 @@ typedef NS_ENUM(u_int8_t, HUMCoodinateSystemOrigin) {
 ///---------------------------
 
 /**
- *	Queried to find information about specific nodes. If nil, all nodes are considered walkable and will use a base movement cost of 10.
+ *	An object that conforms to the HUMAStarPathfinderDelegate protocol. Queried to find information about specific nodes. If nil, all nodes are considered walkable and will use a base movement cost of 10.
  *
  *  The default value is nil.
  */
 @property (nonatomic, weak) id<HUMAStarPathfinderDelegate> delegate;
 
 /**
- *	The size of the tile map in tiles. For example, 15 by 10 tiles, not points.
+ *	The size of the tile map in tiles. For example, a CGSize of 15, 10 denotes a map that is 15 tiles wide by 10 tiles high.
  */
 @property (nonatomic, assign) CGSize tileMapSize;
 
@@ -144,7 +144,7 @@ typedef NS_ENUM(u_int8_t, HUMCoodinateSystemOrigin) {
 ///---------------------------
 
 /**
- *	Finds the shortest path from one point to another.
+ *	Finds the shortest path from the start point to the target point avoiding any non-walkable nodes.
  *
  *	@param	start	A CGPoint where the path should start.
  *	@param	target	A CGPoint where the path should end.
