@@ -48,6 +48,7 @@
 		_pathCanCrossBorders = YES;
 		_ignoreDiagonalBarriers = NO;
 		_distanceType = HUMAStarDistanceTypeManhattan;
+		_coordinateSystemOrigin = HUMCoodinateSystemOriginBottomLeft;
 		_baseMovementCost = 10;
 		_diagonalMovementCost = sqrtf((_baseMovementCost * _baseMovementCost) + (_baseMovementCost * _baseMovementCost));
 		_openList = [NSMutableArray array];
@@ -362,7 +363,14 @@
 	CGSize mapSize = self.tileMapSize;
 	
 	NSInteger x = position.x / tileSize.width;
-	NSInteger y = ((mapSize.height * tileSize.height) - position.y) / tileSize.height;
+	NSInteger y = 0;
+	
+	if (self.coordinateSystemOrigin == HUMCoodinateSystemOriginBottomLeft) {
+		y = ((mapSize.height * tileSize.height) - position.y) / tileSize.height;
+	}
+	else if (self.coordinateSystemOrigin == HUMCoodinateSystemOriginTopLeft) {
+		y = position.y / tileSize.height;
+	}
 	
 	return CGPointMake(x, y);
 }
@@ -371,8 +379,15 @@
 	CGSize mapSize = self.tileMapSize;
 	CGSize tileSize = self.tileSize;
 
-	NSInteger x = (tileLocation.x * tileSize.width) + tileSize.width / 2.0f;
-    NSInteger y = (mapSize.height * tileSize.height) - (tileLocation.y * tileSize.height) - tileSize.height / 2.0f;
+	CGFloat x = (tileLocation.x * tileSize.width) + tileSize.width / 2.0f;
+	CGFloat y = 0.0f;
+	
+	if (self.coordinateSystemOrigin == HUMCoodinateSystemOriginBottomLeft) {
+		y = (mapSize.height * tileSize.height) - (tileLocation.y * tileSize.height) - tileSize.height / 2.0f;
+	}
+	else if (self.coordinateSystemOrigin == HUMCoodinateSystemOriginTopLeft) {
+		y = (tileLocation.y * tileSize.height) + tileSize.height / 2.0f;
+	}
 	
 	return CGPointMake(x, y);
 }

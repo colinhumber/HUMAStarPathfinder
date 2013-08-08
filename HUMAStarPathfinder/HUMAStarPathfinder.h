@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
+typedef NS_ENUM(u_int8_t, HUMAStarDistanceType) {
 	/**
 	 *	Useful when on a square grid that allows 4 directions of movement. Also known as taxicab distance.
 	 *  See http://en.wikipedia.org/wiki/Taxicab_geometry for more details.
@@ -26,6 +26,18 @@ typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
 	 * See http://en.wikipedia.org/wiki/Chebyshev_distance for more details.
 	 */
 	HUMAStarDistanceTypeChebyshev
+};
+
+typedef NS_ENUM(u_int8_t, HUMCoodinateSystemOrigin) {
+	/**
+	 *	The origin (0, 0) is at the top-left of the screen. For example, UIKit.
+	 */
+	HUMCoodinateSystemOriginTopLeft = 0,
+	
+	/**
+	 *	The origin (0, 0) is at the bottom-left of the screen. For example, SpriteKit and Cocos2d.
+	 */
+	HUMCoodinateSystemOriginBottomLeft
 };
 
 @class HUMAStarPathfinderNode;
@@ -50,12 +62,12 @@ typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
 @property (nonatomic, weak) id<HUMAStarPathfinderDelegate> delegate;
 
 /**
- *	The size of the tile map.
+ *	The size of the tile map in tiles. For example, 15 by 10 tiles, not points.
  */
 @property (nonatomic, assign) CGSize tileMapSize;
 
 /**
- *	The size of each tile on the tile map.
+ *	The size of each tile on the tile map in points.
  */
 @property (nonatomic, assign) CGSize tileSize;
 
@@ -65,6 +77,16 @@ typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
  *  The default value is HUMAStarDistanceTypeManhattan.
  */
 @property (nonatomic, assign) HUMAStarDistanceType distanceType;
+
+/**
+ *	The origin point for the coordinate system being used. This is used to determine the CGPoint values for the returned path. The 
+ *  start, target, and path points will all be relative to this origin.
+ *  
+ *  For example, UIKit has it's origin (0, 0) at the top-left, whereas SpriteKit and Cocos2d have their origin at the bottom-left.
+ *  
+ *  The default value is HUMCoodinateSystemOriginBottomLeft.
+ */
+@property (nonatomic, assign) HUMCoodinateSystemOrigin coordinateSystemOrigin;
 
 /**
  *	If YES, the calculated path can include diagonal paths. If NO, the path will only include horizontal and vertical paths. 
@@ -96,7 +118,27 @@ typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
 ///---------------------------
 /// @name Initialization
 ///---------------------------
+
+/**
+ *	Initializes and returns an newly allocated pathfinder object with the specified tile map size, tile size, and delegate.
+ *
+ *	@param	mapSize		The size of the map in tiles. For example, a CGSize of 15, 10 denotes a map that is 15 tiles wide by 10 tiles high.
+ *	@param	tileSize	The size of each tile on the map in points.
+ *	@param	delegate	The pathfinder's delegate, or nil if it doesn't have a delegate.
+ *
+ *	@return	An initialized pathfinder object or nil, if the pathfinder could not be initialized.
+ */
 + (instancetype)pathfinderWithTileMapSize:(CGSize)mapSize tileSize:(CGSize)tileSize delegate:(id<HUMAStarPathfinderDelegate>)delegate;
+
+/**
+ *	Initializes and returns an newly allocated pathfinder object with the specified tile map size, tile size, and delegate.
+ *
+ *	@param	mapSize		The size of the map in tiles. For example, a CGSize of 15, 10 denotes a map that is 15 tiles wide by 10 tiles high.
+ *	@param	tileSize	The size of each tile on the map in points.
+ *	@param	delegate	The pathfinder's delegate, or nil if it doesn't have a delegate.
+ *
+ *	@return	An initialized pathfinder object or nil, if the pathfinder could not be initialized.
+ */
 - (id)initWithTileMapSize:(CGSize)mapSize tileSize:(CGSize)tileSize delegate:(id<HUMAStarPathfinderDelegate>)delegate;
 
 ///---------------------------
@@ -111,6 +153,9 @@ typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
  *
  *	@return	An NSArray of NSValue-wrapped CGPoints describing the path from start to target. If the start and target nodes are equal, the target node is not walkable, or there is no
  *			valid path, then nil.
+ *  
+ *  @note The returned CGPoints are relative to the specified coordinateSystemOrigin value. If HUMCoodinateSystemOriginTopLeft, the position is relative to the top-left of the screen.
+ *		  If HUMCoodinateSystemOriginBottomLeft, the position is relative to the bottom-left of the screen.
  */
 - (NSArray *)findPathFromStart:(CGPoint)start toTarget:(CGPoint)target;
 
@@ -124,7 +169,10 @@ typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
  *
  *	@param	tileLocation	The location of the tile within the tile matrix (eg. 2, 0)
  *
- *	@return	The position on screen in the center of the provided tile (eg. 48, 16)
+ *	@return	The position on screen in the center of the provided tile (eg. 48, 16). 
+ *  
+ *  @note The returned CGPoint is relative to the specified coordinateSystemOrigin value. If HUMCoodinateSystemOriginTopLeft, the position is relative to the top-left of the screen.
+ *		  If HUMCoodinateSystemOriginBottomLeft, the position is relative to the bottom-left of the screen.
  */
 - (CGPoint)positionForTileLocation:(CGPoint)tileLocation;
 
@@ -134,6 +182,9 @@ typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
  *	@param	position	A position on the screen (eg. 47, 14)
  *
  *	@return	The location of the tile within the tile matrix (eg. 2, 0)
+ *  
+ *  @note The returned CGPoint is relative to the specified coordinateSystemOrigin value. If HUMCoodinateSystemOriginTopLeft, the position is relative to the top-left of the screen.
+ *		  If HUMCoodinateSystemOriginBottomLeft, the position is relative to the bottom-left of the screen.
  */
 - (CGPoint)tileLocationForPosition:(CGPoint)position;
 
