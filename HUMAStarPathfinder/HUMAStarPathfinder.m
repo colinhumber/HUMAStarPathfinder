@@ -179,7 +179,7 @@
 #if TARGET_OS_IPHONE
 		[self.shortestPath insertObject:[NSValue valueWithCGPoint:screenPosition] atIndex:0];
 #else
-		[self.shortestPath insertObject[NSValue valueWithPoint:screenPosition] atIndex:0];
+		[self.shortestPath insertObject:[NSValue valueWithPoint:screenPosition] atIndex:0];
 #endif
 		node = node.parentNode;
 	}
