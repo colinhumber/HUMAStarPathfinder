@@ -141,11 +141,11 @@ typedef NS_ENUM(NSUInteger, HUMAStarDistanceType) {
 
 
 /**
- *	The delegate of a HUMAStarPathFinding object must conform to the HUMAStarPathfinderDelegate protocol. All methods are optional and are used to determine the
+ *	The delegate of a HUMAStarPathFinding object must conform to the HUMAStarPathfinderDelegate protocol. All methods are required and are used to determine the
  *  walkability of tiles.
  */
 @protocol HUMAStarPathfinderDelegate <NSObject>
-@optional
+@required
 /**
  *	Determines if a particular node is walkable. Walkability is dictated by the app/game. For example, a mountain may be unwalkable whereas a swamp may be.
  *

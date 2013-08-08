@@ -95,14 +95,14 @@
 	CCTMXLayer *meta = [self.tileMap layerNamed:@"Meta"];
 	uint8_t gid = [meta tileGIDAt:tileLocation];
 
+	BOOL walkable = YES;
+	
 	if (gid) {
 		NSDictionary *properties = [self.tileMap propertiesForGID:gid];
-		BOOL walkable = [properties[@"walkable"] boolValue];
-		
-		return walkable;
+		walkable = [properties[@"walkable"] boolValue];
 	}
 	
-	return YES;
+	return walkable;
 }
 
 
