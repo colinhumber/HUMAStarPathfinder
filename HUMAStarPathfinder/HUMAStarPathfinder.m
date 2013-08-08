@@ -20,7 +20,7 @@
 @property (nonatomic, strong) HUMAStarPathfinderNode *targetNode;
 @property (nonatomic, assign) CGPoint startPoint;
 
-@property (nonatomic, assign) NSInteger baseMovementCost;
+@property (nonatomic, assign) NSUInteger baseMovementCost;
 @property (nonatomic, assign) CGFloat diagonalMovementCost;
 
 @property (nonatomic, copy) NSMutableArray *openList;
