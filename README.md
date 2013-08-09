@@ -1,6 +1,6 @@
 # HUMAStarPathfinder
 
-A* Pathfinding implementation for iOS (and presumably Mac OS X...I don't have a Mac dev account) games.
+Objective-C implmenetation of the [A* Pathfinding algorithm](http://en.wikipedia.org/wiki/A*_search_algorithm) for iOS and OS X games.
 
 HUMAStarPathfinder is tested on iOS 6 and iOS 7 and requires ARC. 
 
