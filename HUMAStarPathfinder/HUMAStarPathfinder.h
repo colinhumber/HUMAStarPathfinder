@@ -114,10 +114,12 @@ typedef NS_ENUM(NSUInteger, HUMCoodinateSystemOrigin) {
 @property (nonatomic, assign) BOOL pathCanCrossBorders;
 
 /**
- *	The cost to move horizontally from one node to another. This is set to 10 but different costs can be used by conforming to the HUMAStarPathfinderDelegate and implementing
- *  -pathfinder:costForNodeAtTileLocation:.
+ *	The cost to move horizontally from one node to another. Different costs can be used by conforming to the HUMAStarPathfinderDelegate and implementing
+ *  -pathfinder:costForNodeAtTileLocation:. This can be set to any value greater than zero if you use another value in your game.
+ *
+ *  The default is 10.
  */
-@property (nonatomic, readonly) NSUInteger baseMovementCost;
+@property (nonatomic, assign) NSUInteger baseMovementCost;
 
 ///---------------------------
 /// @name Initialization

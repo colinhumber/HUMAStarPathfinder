@@ -50,8 +50,8 @@
 		_ignoreDiagonalBarriers = NO;
 		_distanceType = HUMAStarDistanceTypeManhattan;
 		_coordinateSystemOrigin = HUMCoodinateSystemOriginBottomLeft;
-		_baseMovementCost = 10;
-		_diagonalMovementCost = sqrtf((_baseMovementCost * _baseMovementCost) + (_baseMovementCost * _baseMovementCost));
+		[self setBaseMovementCost:10];
+		_diagonalMovementCost = [self calculateDiagonalMovementCost];
 		_openList = [NSMutableArray array];
 		_closedList = [NSMutableArray array];
 		_shortestPath = [NSMutableArray array];
@@ -66,13 +66,37 @@
 - (void)setDelegate:(id<HUMAStarPathfinderDelegate>)delegate {
 	_delegate = delegate;
 	
-	if ([_delegate respondsToSelector:@selector(pathfinder:canWalkToNodeAtTileLocation:)]) {
-		_delegateFlags.delegateCanWalkToNodeAtTileLocation = YES;
-	}
+	_delegateFlags.delegateCanWalkToNodeAtTileLocation = [_delegate respondsToSelector:@selector(pathfinder:canWalkToNodeAtTileLocation:)];
+	_delegateFlags.delegateCostForNodeAtTileLocation = [_delegate respondsToSelector:@selector(pathfinder:costForNodeAtTileLocation:)];
+}
+
+- (void)setTileMapSize:(CGSize)tileMapSize {
+	NSAssert(tileMapSize.width > 0 && tileMapSize.height > 0, @"tileMapSize cannot have a width or height of 0.");
 	
-	if ([_delegate respondsToSelector:@selector(pathfinder:costForNodeAtTileLocation:)]) {
-		_delegateFlags.delegateCostForNodeAtTileLocation = YES;
+	if (!CGSizeEqualToSize(_tileMapSize, tileMapSize)) {
+		_tileMapSize = tileMapSize;
 	}
+}
+
+- (void)setTileSize:(CGSize)tileSize {
+	NSAssert(tileSize.width > 0 && tileSize.height > 0, @"tileSize cannot have a width or height of 0.");
+	
+	if (!CGSizeEqualToSize(_tileSize, tileSize)) {
+		_tileSize = tileSize;
+	}
+}
+
+- (void)setBaseMovementCost:(NSUInteger)baseMovementCost {
+	NSAssert(baseMovementCost > 0, @"baseMovementCost must be a value greater than 0.");
+	
+	if (_baseMovementCost != baseMovementCost) {
+		_baseMovementCost = baseMovementCost;
+		_diagonalMovementCost = [self calculateDiagonalMovementCost];
+	}
+}
+
+- (CGFloat)calculateDiagonalMovementCost {
+	return sqrtf((_baseMovementCost * _baseMovementCost) + (_baseMovementCost * _baseMovementCost));
 }
 
 #pragma mark - Pathfinding
