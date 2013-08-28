@@ -4,12 +4,14 @@ Objective-C implmenetation of the [A* Pathfinding algorithm](http://en.wikipedia
 
 HUMAStarPathfinder is tested on iOS 6 and iOS 7 and requires ARC. 
 
-The pathfinding algorithm is generic to work with any game engines (I've tested it with Cocos2d and SpriteKit), but will return a path assuming the game engine's coordinate system has its origin at the bottom-left of the screen.
+The pathfinding algorithm is generic to work with any game engine (I've tested it with Cocos2d and SpriteKit).
 
 ## Example
 Check out the included Xcode project for an example Cocos2d game. The sample will only run on a non-retina device/simulator properly as I haven't had a chance to create a retina tile map yet. Tap anywhere to move the icon, which will avoid any tiles marked in red.
 
 ## Usage
+_NOTE: this example is using the Cocos2d tile map objects. This is just for the sake of example and is not required._
+
 ```objc
 // initialize a pathfinder. Store as an instance variable so you can reference it on touches later. Optionally set a delegate. The tileMap object can be any tile map implementation. In the example, it is a CCTMXTiledMap, but can be anything. The mapSize is the size of the map in tiles. The tileSize is the size of each tile.
 self.pathfinder = [HUMAStarPathfinder pathfinderWithTileMapSize:tileMap.mapSize
